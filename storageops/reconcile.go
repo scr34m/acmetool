@@ -173,6 +173,10 @@ func (r *reconcile) disjoinTargets() (hostnameTargetMapping map[string]*storage.
 	var targets []*storage.Target
 
 	r.store.VisitTargets(func(t *storage.Target) error {
+		selected, err := r.targetIsSelected(t)
+		if err != nil || !selected {
+			return err
+		}
 		targets = append(targets, t)
 		return nil
 	})
